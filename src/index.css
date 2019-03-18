@@ -20,5 +20,5 @@ body {
 }
 
 .grid-cell.revealed.mine {
-  border-color: red;
+  border-color: lightcoral
 }
