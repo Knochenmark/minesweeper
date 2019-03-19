@@ -41,12 +41,18 @@ export default class MineSweeper extends React.Component<{}, IMineSweeperStatePr
     });
 
     return (
-      <div className="mine-sweeper">
-        <div className="game-state">{this.state.gameStatus}</div>
-        Points ResetButton MineCounter
-        Minesweeper Grid
-        <button onClick={() => this.resetGame()}>Reset</button>
-        {grid}
+      <div className="game-wrapper">
+        <h1>Minesweeper</h1>
+        <div className="mine-sweeper">
+          <div className="game-state">
+            {/* TODO Add Mine Counter */}
+            {this.state.gameStatus}
+            <button onClick={() => this.resetGame()}>Reset</button>
+          </div>
+          <div className="grid">
+            {grid}
+          </div>
+        </div>
       </div>
     );
   }
