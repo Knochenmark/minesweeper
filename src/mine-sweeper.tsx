@@ -24,7 +24,6 @@ export default class MineSweeper extends React.Component<{}, IMineSweeperStatePr
   public gameOver() {
     this.setState({ gameStatus: "X_X" });
     this.revealAllMines();
-
     console.log("GAMEOVER", this.state.mineField)
   }
 
@@ -40,12 +39,17 @@ export default class MineSweeper extends React.Component<{}, IMineSweeperStatePr
       return <div key={`row-${i}`} className="grid-row">{cells}</div>
     });
 
+    const mineCounter = this.state.mineField.flat().filter((m: IMineField) => m.isMine && !m.isRevealed).length; // TODO Fix counter when flags are introduce
+    const counterText = mineCounter < 10 ? `0${mineCounter}` : `${mineCounter}`;
+
     return (
       <div className="game-wrapper">
         <h1>Minesweeper</h1>
         <div className="mine-sweeper">
           <div className="game-state">
-            {/* TODO Add Mine Counter */}
+            <div className="counter">
+              <span>{counterText}</span>
+            </div>
             {this.state.gameStatus}
             <button onClick={() => this.resetGame()}>Reset</button>
           </div>
@@ -96,7 +100,6 @@ export default class MineSweeper extends React.Component<{}, IMineSweeperStatePr
       this.revealCell(x, y);
       // this.checkSurroundingCells(x, y)
     }
-    console.log(`state says: ${this.state.mineField[x][y].isMine}`)
   }
 
   private isMine = (x: number, y: number): boolean => this.state.mineField[x][y].isMine
