@@ -39,7 +39,10 @@ export default class MineSweeper extends React.Component<{}, IMineSweeperStatePr
       return <div key={`row-${i}`} className="grid-row">{cells}</div>
     });
 
-    const mineCounter = this.state.mineField.flat().filter((m: IMineField) => m.isMine && !m.isRevealed).length; // TODO Fix counter when flags are introduce
+    // TODO Change counter so that flagged mines are also counted when flags are introduce
+    const mineCounter = this.state.mineField
+      .reduce((acc: IMineField[], val: IMineField[]) => acc.concat(val), [])
+      .filter((m: IMineField) => m.isMine && !m.isRevealed).length;
     const counterText = mineCounter < 10 ? `0${mineCounter}` : `${mineCounter}`;
 
     return (
