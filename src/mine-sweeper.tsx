@@ -71,7 +71,7 @@ export default class MineSweeper extends React.Component<{}, IMineSweeperStatePr
     })
   }
 
-  private placeMinesOnField(mineField: any, rows: number, columns: number, numberOfMines: number) {
+  private placeMinesOnField(mineField: IMineField[][], rows: number, columns: number, numberOfMines: number) {
     while (numberOfMines > 0) {
       const rowIdx = this.random(rows)
       const colIdx = this.random(columns)
