@@ -4,20 +4,34 @@ import * as React from 'react';
 
 interface IMineSweeperStateProps {
   gameStatus: string;
+  rows: number;
+  columns: number;
+  mines: number;
   mineField: IMineField[][];
 }
 
 interface IMineField {
   isMine: boolean;
   isRevealed: boolean;
+  isFlagged: boolean;
+  mineCounter: number | null;
 }
 
-export default class MineSweeper extends React.Component<{}, IMineSweeperStateProps> {
-  constructor(props = {}) {
+export interface IMineSweeperProps{
+  rows: number,
+  columns: number,
+  mines: number,
+}
+
+export default class MineSweeper extends React.Component<IMineSweeperProps, IMineSweeperStateProps> {
+  constructor(props: IMineSweeperProps) {
     super(props)
     this.state = {
       gameStatus: "0_0",
-      mineField: this.generateMineField(6, 6, 6)
+      rows: this.props.rows,
+      columns: this.props.columns,
+      mines: this.props.mines,
+      mineField: this.generateMineField(this.props.rows,this.props.columns,this.props.mines)
     }
   }
 
@@ -34,7 +48,7 @@ export default class MineSweeper extends React.Component<{}, IMineSweeperStatePr
         const isRevealedMine = this.state.mineField[i][j].isRevealed && this.state.mineField[i][j].isMine;
         const revealed = isRevealed ? " revealed" : "";
         const revealedMine = isRevealedMine ? " mine" : "";
-        return <div key={`cell-${i}-${j}`} className={`grid-cell${revealed}${revealedMine}`} onClick={() => this.cellClickedHandler(i, j)} />
+        return <div key={`cell-${i}-${j}`} className={`grid-cell${revealed}${revealedMine}`} onClick={() => this.cellClickedHandler(i, j)} >{this.state.mineField[i][j].mineCounter}</div>
       });
       return <div key={`row-${i}`} className="grid-row">{cells}</div>
     });
@@ -85,15 +99,27 @@ export default class MineSweeper extends React.Component<{}, IMineSweeperStatePr
 
   private random = (num: number): number => Math.floor(Math.random() * num);
 
-  private toObj = (): IMineField => ({ isMine: false, isRevealed: false });
+  private toMineField = (): IMineField => ({ 
+    isMine: false, 
+    isFlagged: false,
+    isRevealed: false,
+    mineCounter: null
+  });
 
   private createEmptyField = (rows: number, columns: number) =>
     Array(rows)
       .fill(0)
-      .map(_ => Array(columns).fill(0).map(m => this.toObj()))
+      .map(_ => Array(columns).fill(0).map(m => this.toMineField()))
 
-  private generateMineField(rows: number, columns: number, eggs: number) {
-    return this.placeMinesOnField(this.createEmptyField(rows, columns), rows, columns, eggs);
+  private generateMineField(rows: number, columns: number, mines: number) {
+    return this.setMineCounters(
+      this.placeMinesOnField(
+        this.createEmptyField(rows, columns), 
+        rows, 
+        columns, 
+        mines
+        )
+      );
   }
 
   private cellClickedHandler(x: number, y: number) {
@@ -129,44 +155,54 @@ export default class MineSweeper extends React.Component<{}, IMineSweeperStatePr
     this.checkSurroundingCells(x, y);
   }
 
+  // this function is not knowing the border
+  private constructSurroundingCell(x: number, y: number){
+    return [[x-1,y-1],[x,y-1],[x+1,y-1],[x-1,y],[x+1,y],[x-1,y+1],[x,y+1],[x+1,y+1]]
+  }
+
+  private setMineCounters(mineField: IMineField[][]): IMineField[][]{
+    const res = mineField
+      .map((row,y) => row
+        .map((field,x) => {
+          return field.isMine
+            ? field
+            : {
+            ...field,
+            mineCounter: this.countSurroundingMines(x,y, mineField)
+          }
+        })
+      )
+      console.log(res)
+      return res
+  }
+
+  private countSurroundingMines(x:number, y:number, mineField: IMineField[][]): number{
+    let counter = 0;
+    this.constructRealSuroundingCell(x,y).forEach((pos: number[]) => {
+      if(mineField[pos[0]][pos[1]].isMine){
+        counter++;
+      }
+    });
+    return counter;
+  }
+
+  /// this function is exclude the border
+  private constructRealSuroundingCell(x: number, y: number) {
+    return this.constructSurroundingCell(x,y).reduce((acc,val) => 
+      val[0] < 0 
+        ? acc
+        : val[1] < 0
+          ? acc
+          : val[0] >= this.props.rows
+            ? acc
+            : val[1] >= this.props.columns
+              ? acc
+              : [...acc, val]
+      ,[])
+  }
+  
   private checkSurroundingCells(x: number, y: number) {
-    // let mineCounter = 0;
-
-    // if (x - 1 >= 0 && y - 1 >= 0) {
-    //   mineCounter += this.state.mineField[x - 1][y - 1];
-    //   mineCounter += this.state.mineField[x][y - 1];
-    //   mineCounter += this.state.mineField[x - 1][y];
-    // }
-    // if (y - 1 >= 0 && x + 1 < this.columns) {
-    //   mineCounter += this.state.mineField[x + 1][y - 1];
-    // }
-    // if (x + 1 < this.columns) {
-    //   mineCounter += this.state.mineField[x + 1][y];
-    // }
-    // if (x - 1 >= 0 && y + 1 < this.rows) {
-    //   mineCounter += this.state.mineField[x][y + 1];
-    //   mineCounter += this.state.mineField[x - 1][y + 1];
-    // }
-    // if (x + 1 < this.columns && y + 1 < this.rows) {
-    //   mineCounter += this.state.mineField[x + 1][y + 1];
-    // }
-
-    // console.log("minecounter", mineCounter);
-
-    // if (mineCounter !== 0) {
-    // this.revealCell(x,y,mineCounter);
-    // } else {
-    // not tco yet
-    /*
-    checkSurroundingCells(x-1,y-1)
-    checkSurroundingCells(x-1,y-1)
-    checkSurroundingCells(x-1,y-1)
-    checkSurroundingCells(x-1,y-1)
-
-    checkSurroundingCells(x-1,y-1)
-    checkSurroundingCells(x-1,y-1)
-    checkSurroundingCells(x-1,y-1)
-    checkSurroundingCells(x-1,y-1)
-    */
+    const initialArray = this.constructRealSuroundingCell(x,y)
+    console.log(initialArray)
   }
 }
