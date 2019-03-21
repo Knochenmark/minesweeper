@@ -77,6 +77,10 @@ body {
   border: 1px solid #b8b8b8;
 }
 
+.grid-cell.flagged {
+  border: 1px solid lime;
+}
+
 .grid-cell.revealed.mine {
   background-color: #ec433c;
 }
