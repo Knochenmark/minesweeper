@@ -45,10 +45,12 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     const grid = this.state.mineField.map((row: any, i: any) => {
       const cells = row.map((_: any, j: any) => {
         const isRevealed = this.state.mineField[i][j].isRevealed;
+        const isFlagged = this.state.mineField[i][j].isFlagged;
         const isRevealedMine = this.state.mineField[i][j].isRevealed && this.state.mineField[i][j].isMine;
+        const flagged = isFlagged ? " flagged" : "";
         const revealed = isRevealed ? " revealed" : "";
         const revealedMine = isRevealedMine ? " mine" : "";
-        return <div key={`cell-${i}-${j}`} className={`grid-cell${revealed}${revealedMine}`} onClick={() => this.cellClickedHandler(i, j)} >{this.state.mineField[i][j].mineCounter}</div>
+        return <div key={`cell-${i}-${j}`} className={`grid-cell${revealed}${revealedMine}${flagged}`} onClick={(e) => this.cellClickedHandler(e, i, j)} >{this.state.mineField[i][j].mineCounter}</div>
       });
       return <div key={`row-${i}`} className="grid-row">{cells}</div>
     });
@@ -81,7 +83,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
   private resetGame() {
     this.setState({
       gameStatus: "0_0",
-      mineField: this.generateMineField(6, 6, 6)
+      mineField: this.generateMineField(this.props.rows, this.props.columns, this.props.mines)
     })
   }
 
@@ -122,11 +124,11 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     );
   }
 
-  private cellClickedHandler(x: number, y: number) {
-    if (this.isMine(x, y)) {
+  private cellClickedHandler(e: React.MouseEvent, x: number, y: number) {
+    if (!e.shiftKey && this.isMine(x, y)) {
       this.gameOver();
     } else {
-      this.revealCell(x, y);
+      e.shiftKey ? this.toggleFlagged(x, y) : this.revealCell(x, y);
     }
   }
 
@@ -144,9 +146,20 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     });
   }
 
+  private toggleFlagged(x: number, y: number) {
+    const mineField = this.state.mineField;
+    if (!mineField[x][y].isRevealed) {
+      mineField[x][y].isFlagged = true
+      this.setState({
+        mineField
+      });
+    }
+  }
+
   private revealCell(x: number, y: number) {
     const mineField = this.state.mineField;
     mineField[x][y].isRevealed = true;
+    mineField[x][y].isFlagged = false;
     this.setState({
       mineField
     });
