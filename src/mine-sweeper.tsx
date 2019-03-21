@@ -17,7 +17,7 @@ interface IMineField {
   mineCounter: number | null;
 }
 
-export interface IMineSweeperProps{
+interface IMineSweeperProps {
   rows: number,
   columns: number,
   mines: number,
@@ -31,7 +31,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
       rows: this.props.rows,
       columns: this.props.columns,
       mines: this.props.mines,
-      mineField: this.generateMineField(this.props.rows,this.props.columns,this.props.mines)
+      mineField: this.generateMineField(this.props.rows, this.props.columns, this.props.mines)
     }
   }
 
@@ -99,11 +99,11 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
 
   private random = (num: number): number => Math.floor(Math.random() * num);
 
-  private toMineField = (): IMineField => ({ 
-    isMine: false, 
+  private toMineField = (): IMineField => ({
+    isMine: false,
     isFlagged: false,
     isRevealed: false,
-    mineCounter: null
+    mineCounter: null // If its a mine the counter will remain null
   });
 
   private createEmptyField = (rows: number, columns: number) =>
@@ -114,12 +114,12 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
   private generateMineField(rows: number, columns: number, mines: number) {
     return this.setMineCounters(
       this.placeMinesOnField(
-        this.createEmptyField(rows, columns), 
-        rows, 
-        columns, 
+        this.createEmptyField(rows, columns),
+        rows,
+        columns,
         mines
-        )
-      );
+      )
+    );
   }
 
   private cellClickedHandler(x: number, y: number) {
@@ -127,13 +127,11 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
       this.gameOver();
     } else {
       this.revealCell(x, y);
-      // this.checkSurroundingCells(x, y)
     }
   }
 
   private isMine = (x: number, y: number): boolean => this.state.mineField[x][y].isMine
 
-  // this is for game over
   private revealAllMines() {
     const mineField = this.state.mineField;
     mineField.map(row => row.map(field => {
@@ -155,41 +153,37 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     this.checkSurroundingCells(x, y);
   }
 
-  // this function is not knowing the border
-  private constructSurroundingCell(x: number, y: number){
-    return [[x-1,y-1],[x,y-1],[x+1,y-1],[x-1,y],[x+1,y],[x-1,y+1],[x,y+1],[x+1,y+1]]
+  private getSurroundingCells(x: number, y: number) {
+    return [[x - 1, y - 1], [x, y - 1], [x + 1, y - 1], [x - 1, y], [x + 1, y], [x - 1, y + 1], [x, y + 1], [x + 1, y + 1]]
   }
 
-  private setMineCounters(mineField: IMineField[][]): IMineField[][]{
-    const res = mineField
-      .map((row,y) => row
-        .map((field,x) => {
+  private setMineCounters(mineField: IMineField[][]): IMineField[][] {
+    return mineField
+      .map((row, y) => row
+        .map((field, x) => {
           return field.isMine
             ? field
             : {
-            ...field,
-            mineCounter: this.countSurroundingMines(x,y, mineField)
-          }
+              ...field,
+              mineCounter: this.countSurroundingMines(x, y, mineField)
+            }
         })
-      )
-      console.log(res)
-      return res
+      );
   }
 
-  private countSurroundingMines(x:number, y:number, mineField: IMineField[][]): number{
+  private countSurroundingMines(x: number, y: number, mineField: IMineField[][]): number {
     let counter = 0;
-    this.constructRealSuroundingCell(x,y).forEach((pos: number[]) => {
-      if(mineField[pos[0]][pos[1]].isMine){
+    this.constructSurroundingCells(x, y).forEach((pos: number[]) => {
+      if (mineField[pos[0]][pos[1]].isMine) {
         counter++;
       }
     });
     return counter;
   }
 
-  /// this function is exclude the border
-  private constructRealSuroundingCell(x: number, y: number) {
-    return this.constructSurroundingCell(x,y).reduce((acc,val) => 
-      val[0] < 0 
+  private constructSurroundingCells(x: number, y: number) {
+    return this.getSurroundingCells(x, y).reduce((acc, val) =>
+      val[0] < 0
         ? acc
         : val[1] < 0
           ? acc
@@ -198,11 +192,10 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
             : val[1] >= this.props.columns
               ? acc
               : [...acc, val]
-      ,[])
+      , [])
   }
-  
+
   private checkSurroundingCells(x: number, y: number) {
-    const initialArray = this.constructRealSuroundingCell(x,y)
-    console.log(initialArray)
+    return this.constructSurroundingCells(x, y);
   }
 }
