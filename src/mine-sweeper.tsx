@@ -172,8 +172,8 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
 
   private setMineCounters(mineField: IMineField[][]): IMineField[][] {
     return mineField
-      .map((row, y) => row
-        .map((field, x) => {
+      .map((row, x) => row
+        .map((field, y) => {
           return field.isMine
             ? field
             : {
@@ -186,7 +186,8 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
 
   private countSurroundingMines(x: number, y: number, mineField: IMineField[][]): number {
     let counter = 0;
-    this.constructSurroundingCells(x, y).forEach((pos: number[]) => {
+    const surroundingCells = this.constructSurroundingCells(x,y)
+    surroundingCells.forEach((pos: number[]) => {
       if (mineField[pos[0]][pos[1]].isMine) {
         counter++;
       }
