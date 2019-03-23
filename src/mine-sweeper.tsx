@@ -2,6 +2,18 @@ import './App.css';
 
 import * as React from 'react';
 
+const numberColors = {
+  0: '',
+  1: 'one',
+  2: 'two',
+  3: 'three',
+  4: 'four',
+  5: 'five',
+  6: 'six',
+  7: 'seven',
+  8: 'eight'
+}
+
 interface IMineSweeperStateProps {
   gameStatus: string;
   rows: number;
@@ -44,13 +56,20 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
   public render() {
     const grid = this.state.mineField.map((row: any, i: any) => {
       const cells = row.map((_: any, j: any) => {
-        const isRevealed = this.state.mineField[i][j].isRevealed;
-        const isFlagged = this.state.mineField[i][j].isFlagged;
-        const isRevealedMine = this.state.mineField[i][j].isRevealed && this.state.mineField[i][j].isMine;
+        const mine = this.state.mineField[i][j];
+        const isRevealed = mine.isRevealed;
+        const isFlagged = mine.isFlagged;
+        const isRevealedMine = mine.isRevealed && mine.isMine;
         const flagged = isFlagged ? " flagged" : "";
         const revealed = isRevealed ? " revealed" : "";
         const revealedMine = isRevealedMine ? " mine" : "";
-        return <div key={`cell-${i}-${j}`} className={`grid-cell${revealed}${revealedMine}${flagged}`} onClick={(e) => this.cellClickedHandler(e, i, j)} >{this.state.mineField[i][j].mineCounter}</div>
+        const num = isRevealed && mine.mineCounter ? numberColors[mine.mineCounter] : '';
+        const counter = mine.mineCounter && mine.mineCounter > 0 ? mine.mineCounter : '';
+        return <div
+          key={`cell-${i}-${j}`}
+          className={`grid-cell${revealed}${revealedMine}${flagged} ${num}`}
+          onClick={(e) => this.cellClickedHandler(e, i, j)}
+        >{counter}</div>
       });
       return <div key={`row-${i}`} className="grid-row">{cells}</div>
     });
@@ -186,7 +205,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
 
   private countSurroundingMines(x: number, y: number, mineField: IMineField[][]): number {
     let counter = 0;
-    const surroundingCells = this.constructSurroundingCells(x,y)
+    const surroundingCells = this.constructSurroundingCells(x, y)
     surroundingCells.forEach((pos: number[]) => {
       if (mineField[pos[0]][pos[1]].isMine) {
         counter++;
