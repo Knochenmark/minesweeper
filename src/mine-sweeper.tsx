@@ -74,11 +74,11 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
       return <div key={`row-${i}`} className="grid-row">{cells}</div>
     });
 
-    // TODO Change counter so that flagged mines are also counted when flags are introduce
-    const mineCounter = this.state.mineField
+    const flagCounter = this.state.mineField
       .reduce((acc: IMineField[], val: IMineField[]) => acc.concat(val), [])
-      .filter((m: IMineField) => m.isMine && !m.isRevealed).length;
-    const counterText = mineCounter < 10 ? `0${mineCounter}` : `${mineCounter}`;
+      .filter((m: IMineField) => m.isFlagged && !m.isRevealed).length;
+    const counter = this.props.mines - flagCounter;
+    const counterText = counter < 10 ? `0${counter}` : `${counter}`;
 
     return (
       <div className="game-wrapper">
@@ -168,7 +168,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
   private toggleFlagged(x: number, y: number) {
     const mineField = this.state.mineField;
     if (!mineField[x][y].isRevealed) {
-      mineField[x][y].isFlagged = true;
+      mineField[x][y].isFlagged = !mineField[x][y].isFlagged
       this.setState({
         mineField
       });
