@@ -1,3 +1,14 @@
+:root {
+  --number-color-one: blue;
+  --number-color-two: green;
+  --number-color-three: red;
+  --number-color-four: purple;
+  --number-color-five: maroon;
+  --number-color-six: turquoise;
+  --number-color-seven: black;
+  --number-color-eight: gray;
+}
+
 *, *:before, *:after {
   box-sizing: border-box;
 }
@@ -59,6 +70,8 @@ body {
   position: relative;
   width: 30px;
   height: 30px;
+  font-weight: bold;
+  user-select: none;
   background-color: #ddd;
   cursor: pointer;
   display: flex;
@@ -95,4 +108,38 @@ body {
   content: '';
   position: absolute;
   transform: translate(-50%, -50%);
+}
+
+/* NUMBER COLORS */
+
+.grid-cell.revealed.one {
+  color: var(--number-color-one);
+}
+
+.grid-cell.revealed.two {
+  color: var(--number-color-two);
+}
+
+.grid-cell.revealed.three {
+  color: var(--number-color-three);
+}
+
+.grid-cell.revealed.four {
+  color: var(--number-color-four);
+}
+
+.grid-cell.revealed.five {
+  color: var(--number-color-five);
+}
+
+.grid-cell.revealed.six {
+  color: var(--number-color-six);
+}
+
+.grid-cell.revealed.seven {
+  color: var(--number-color-seven);
+}
+
+.grid-cell.revealed.eight {
+  color: var(--number-color-gray);
 }
