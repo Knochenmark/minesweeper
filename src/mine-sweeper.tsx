@@ -157,7 +157,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     const mineField = this.state.mineField;
     mineField.map(row => row.map(field => {
       if (field.isMine) {
-        field.isRevealed = true
+        field.isRevealed = true;
       }
     }));
     this.setState({
@@ -168,7 +168,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
   private toggleFlagged(x: number, y: number) {
     const mineField = this.state.mineField;
     if (!mineField[x][y].isRevealed) {
-      mineField[x][y].isFlagged = true
+      mineField[x][y].isFlagged = true;
       this.setState({
         mineField
       });
@@ -186,7 +186,16 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
   }
 
   private getSurroundingCells(x: number, y: number) {
-    return [[x - 1, y - 1], [x, y - 1], [x + 1, y - 1], [x - 1, y], [x + 1, y], [x - 1, y + 1], [x, y + 1], [x + 1, y + 1]]
+    return [
+      [x - 1, y - 1],
+      [x, y - 1],
+      [x + 1, y - 1],
+      [x - 1, y],
+      [x + 1, y],
+      [x - 1, y + 1],
+      [x, y + 1],
+      [x + 1, y + 1]
+    ];
   }
 
   private setMineCounters(mineField: IMineField[][]): IMineField[][] {
@@ -225,7 +234,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
             : val[1] >= this.props.columns
               ? acc
               : [...acc, val]
-      , [])
+      , []);
   }
 
   private checkSurroundingCells(x: number, y: number) {
