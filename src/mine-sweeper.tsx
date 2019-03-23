@@ -64,12 +64,12 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
         const revealed = isRevealed ? " revealed" : "";
         const revealedMine = isRevealedMine ? " mine" : "";
         const num = isRevealed && mine.mineCounter ? numberColors[mine.mineCounter] : '';
-        const counter = mine.mineCounter && mine.mineCounter > 0 ? mine.mineCounter : '';
+        const mineCounter = mine.mineCounter && mine.mineCounter > 0 ? mine.mineCounter : '';
         return <div
           key={`cell-${i}-${j}`}
           className={`grid-cell${revealed}${revealedMine}${flagged} ${num}`}
           onClick={(e) => this.cellClickedHandler(e, i, j)}
-        >{counter}</div>
+        >{mineCounter}</div>
       });
       return <div key={`row-${i}`} className="grid-row">{cells}</div>
     });
