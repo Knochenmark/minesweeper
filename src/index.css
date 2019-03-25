@@ -21,6 +21,33 @@ body {
   color: #333;
 }
 
+a.bug, a.github {
+  width: 35px;
+  height: 35px;
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+
+a.bug {
+  left: unset;
+  right: 0.5rem;
+  transform: rotate(45deg);
+}
+
+a.bug>svg, a.github>svg {
+  fill: #666
+}
+
+a.bug>svg:hover, a.github>svg:hover {
+  fill: #ff5537;
+  cursor: pointer;
+}
+
 .game-wrapper {
   height: 100vh;
   width: 100vw;
