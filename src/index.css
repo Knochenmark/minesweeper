@@ -1,4 +1,5 @@
 :root {
+  --cell-size: 30px;
   --number-color-one: blue;
   --number-color-two: green;
   --number-color-three: red;
@@ -7,6 +8,10 @@
   --number-color-six: turquoise;
   --number-color-seven: black;
   --number-color-eight: gray;
+  --color-red: #ec433c;
+  --color-dark-grey: #333333;
+  --color-light-grey: #666666;
+  --color-grey-1: #e6e7e8;
 }
 
 *, *:before, *:after {
@@ -14,23 +19,23 @@
 }
 
 body {
-  font-family: sans-serif;
-  background-color: #E6E7E8;
   margin: 0;
   padding: 0;
-  color: #333;
+  font-family: sans-serif;
+  color: var(--color-dark-grey);
+  background-color: var(--color-grey-1);
 }
 
 a.bug, a.github {
-  width: 35px;
-  height: 35px;
+  width: var(--cell-size);
+  height: var(--cell-size);
   position: absolute;
   top: 0.5rem;
   left: 0.5rem;
   z-index: 1;
   display: flex;
   justify-content: center;
-  align-items: center
+  align-items: center;
 }
 
 a.bug {
@@ -40,11 +45,11 @@ a.bug {
 }
 
 a.bug>svg, a.github>svg {
-  fill: #666
+  fill: var(--color-light-grey);
 }
 
 a.bug>svg:hover, a.github>svg:hover {
-  fill: #ff5537;
+  fill: var(--color-red);
   cursor: pointer;
 }
 
@@ -63,7 +68,7 @@ a.bug>svg:hover, a.github>svg:hover {
 
 .instructions .hotkey {
   background-color: #C2C4C6;
-  color: #ec433c;
+  color: var(--color-red);
   font-weight: 600;
 }
 
@@ -71,18 +76,18 @@ a.bug>svg:hover, a.github>svg:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .counter {
   padding: 0 4px;
-  color: #ec433c;
   border: 3px inset;
-  line-height: 30px;
+  line-height: var(--cell-size);
   letter-spacing: .08em;
   display: inline-block;
-  background: #333;
-  text-shadow: 0 0 2px #ec433c;
+  color: var(--color-red);
+  background: var(--color-dark-grey);
+  text-shadow: 0 0 2px var(--color-red);
 }
 
 .mine-sweeper {
@@ -105,12 +110,12 @@ a.bug>svg:hover, a.github>svg:hover {
 
 .grid-cell {
   position: relative;
-  width: 30px;
-  height: 30px;
   font-weight: bold;
   user-select: none;
-  background-color: #ddd;
   cursor: pointer;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  background-color: #ddd;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -137,14 +142,14 @@ a.bug>svg:hover, a.github>svg:hover {
 }
 
 .grid-cell.revealed.mine {
-  background-color: #ec433c;
+  background-color: var(--color-red);
 }
 
 .grid-cell.revealed.mine::after {
   border-radius: 50%;
   width: 15px;
   height: 15px;
-  background-color: #333;
+  background-color: var(--color-dark-grey);
   top: 50%;
   left: 50%;
   content: '';
