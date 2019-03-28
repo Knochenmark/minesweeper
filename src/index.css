@@ -57,6 +57,16 @@ a.bug>svg:hover, a.github>svg:hover {
   flex-direction: column;
 }
 
+.instructions {
+  margin-bottom: 18px;
+}
+
+.instructions .hotkey {
+  background-color: #C2C4C6;
+  color: #ec433c;
+  font-weight: 600;
+}
+
 .game-state {
   display: flex;
   justify-content: space-between;
