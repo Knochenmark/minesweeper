@@ -81,6 +81,9 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     return (
       <div className="game-wrapper">
         <h1>Minesweeper</h1>
+        <div className="instructions">
+          <span>To flag cells use <span className="hotkey">shift + click</span></span>
+        </div>
         <div className="mine-sweeper">
           <div className="game-state">
             <div className="counter">
