@@ -117,8 +117,13 @@ a.bug>svg:hover, a.github>svg:hover {
   border: 1px solid #b8b8b8;
 }
 
-.grid-cell.flagged {
-  border: 1px solid lime;
+.grid-cell.flagged::after {
+  display: block;
+  content: '';
+  background-image: url('./assets/flag.svg');
+  background-size: 20px 20px;
+  height: 20px;
+  width: 20px;
 }
 
 .grid-cell.revealed.mine {
