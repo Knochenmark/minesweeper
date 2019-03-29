@@ -25,6 +25,7 @@ interface IMineField {
   isRevealed: boolean;
   isFlagged: boolean;
   mineCounter: number | null;
+  placement: number[];
 }
 
 interface IMineSweeperProps {
@@ -121,17 +122,18 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
 
   private random = (num: number): number => Math.floor(Math.random() * num);
 
-  private toMineField = (): IMineField => ({
+  private toMineField = (x:number, y:number): IMineField => ({
     isMine: false,
     isFlagged: false,
     isRevealed: false,
-    mineCounter: null // If its a mine the counter will remain null
+    mineCounter: null, // If its a mine the counter will remain null
+    placement: [x,y]
   });
 
   private createEmptyField = (rows: number, columns: number) =>
     Array(rows)
       .fill(0)
-      .map(_ => Array(columns).fill(0).map(m => this.toMineField()))
+      .map((_,x) => Array(columns).fill(0).map((m,y) => this.toMineField(x,y)))
 
   private generateMineField(rows: number, columns: number, mines: number) {
     return this.setMineCounters(
@@ -148,7 +150,9 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     if (!e.shiftKey && this.isMine(x, y)) {
       this.gameOver();
     } else {
-      e.shiftKey ? this.toggleFlagged(x, y) : this.revealCell(x, y);
+      e.shiftKey 
+        ? this.toggleFlagged(x, y) 
+        : this.revealCell(x, y);
     }
   }
 
@@ -176,15 +180,39 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     }
   }
 
-  private revealCell(x: number, y: number) {
-    const mineField = this.state.mineField;
-    mineField[x][y].isRevealed = true;
-    mineField[x][y].isFlagged = false;
-    this.setState({
-      mineField
-    });
-    this.checkSurroundingCells(x, y);
+  private revealCell = (x: number, y: number) => {
+    const field = this.state.mineField[x][y]
+    this.revealCellByMineField(field)
+    if (field.mineCounter === 0) {
+      this.revealSurroundingCells(x, y)
+    }
   }
+
+  private revealCellByMineField = (cell: IMineField) =>
+  {
+    if (cell.isMine) { return }
+    else {
+      cell.isRevealed   = true
+      cell.isFlagged    = false
+      this.updateState()
+    }
+  }
+
+  private updateState = () => this.setState({})
+
+  private _revealSurroundingCells(x : number, y: number, remain?: IMineField[]) {
+    const coord       =  this.checkSurroundingCells(x, y)
+    const coordFields = coord.map( e => this.state.mineField[e[0]][e[1]])
+    const rem         = coordFields.filter( e => e.mineCounter === 0 && e.isRevealed === false )
+
+    coordFields.map( e => this.revealCellByMineField(e))
+    this.revealSurroundingCells(x,y,rem)
+  }
+
+  private revealSurroundingCells = (x : number, y: number, remain?: IMineField[]) =>
+    remain === undefined 
+      ? this._revealSurroundingCells(x,y) 
+      : remain.forEach( e => this.revealCell(e.placement[0], e.placement[1]) )
 
   private getSurroundingCells(x: number, y: number) {
     return [
