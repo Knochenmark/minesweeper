@@ -12,6 +12,11 @@ const numberColors = {
   8: 'eight'
 }
 
+interface IPosition {
+  x: number;
+  y: number;
+}
+
 interface IMineSweeperStateProps {
   gameStatus: string;
   rows: number;
@@ -24,8 +29,8 @@ interface IMineField {
   isMine: boolean;
   isRevealed: boolean;
   isFlagged: boolean;
-  mineCounter: number | null;
-  placement: number[];
+  mineCounter: number | null; // If its a mine the counter will be null
+  position: IPosition;
 }
 
 interface IMineSweeperProps {
@@ -67,7 +72,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
         return <div
           key={`cell-${i}-${j}`}
           className={`grid-cell${revealed}${revealedMine}${flagged} ${num}`}
-          onClick={(e) => this.cellClickedHandler(e, i, j)}
+          onClick={(e) => this.onCellClick(e, i, j)}
         >{mineCounter}</div>
       });
       return <div key={`row-${i}`} className="grid-row">{cells}</div>
@@ -110,8 +115,8 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
 
   private placeMinesOnField(mineField: IMineField[][], rows: number, columns: number, numberOfMines: number) {
     while (numberOfMines > 0) {
-      const rowIdx = this.random(rows)
-      const colIdx = this.random(columns)
+      const rowIdx = this.getRandomNumber(rows)
+      const colIdx = this.getRandomNumber(columns)
       if (!mineField[rowIdx][colIdx].isMine) {
         mineField[rowIdx][colIdx].isMine = true
         numberOfMines--;
@@ -120,25 +125,26 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     return mineField;
   }
 
-  private random = (num: number): number => Math.floor(Math.random() * num);
+  private getRandomNumber = (num: number): number => Math.floor(Math.random() * num);
 
-  private toMineField = (x:number, y:number): IMineField => ({
+  private toMineField = (x: number, y: number): IMineField => ({
     isMine: false,
     isFlagged: false,
     isRevealed: false,
     mineCounter: null, // If its a mine the counter will remain null
-    placement: [x,y]
+    position: { x, y }
   });
 
-  private createEmptyField = (rows: number, columns: number) =>
-    Array(rows)
+  private createEmptyMineField(rows: number, columns: number): IMineField[][] {
+    return Array(rows)
       .fill(0)
-      .map((_,x) => Array(columns).fill(0).map((m,y) => this.toMineField(x,y)))
+      .map((_, x) => Array(columns).fill(0).map((m, y) => this.toMineField(x, y)))
+  }
 
   private generateMineField(rows: number, columns: number, mines: number) {
     return this.setMineCounters(
       this.placeMinesOnField(
-        this.createEmptyField(rows, columns),
+        this.createEmptyMineField(rows, columns),
         rows,
         columns,
         mines
@@ -146,12 +152,12 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     );
   }
 
-  private cellClickedHandler(e: React.MouseEvent, x: number, y: number) {
+  private onCellClick(e: React.MouseEvent, x: number, y: number) {
     if (!e.shiftKey && this.isMine(x, y)) {
       this.gameOver();
     } else {
-      e.shiftKey 
-        ? this.toggleFlagged(x, y) 
+      e.shiftKey
+        ? this.toggleFlagged(x, y)
         : this.revealCell(x, y);
     }
   }
@@ -163,6 +169,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     mineField.map(row => row.map(field => {
       if (field.isMine) {
         field.isRevealed = true;
+        field.isFlagged = false;
       }
     }));
     this.setState({
@@ -182,37 +189,25 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
 
   private revealCell = (x: number, y: number) => {
     const field = this.state.mineField[x][y]
-    this.revealCellByMineField(field)
-    if (field.mineCounter === 0) {
-      this.revealSurroundingCells(x, y)
+    field.isRevealed = true
+    field.isFlagged = false
+    this.setState({
+      mineField: this.state.mineField
+    }, () => this.revealSurroundingCells(x, y));
+  }
+
+  private revealSurroundingCells(x: number, y: number) {
+    if (this.state.mineField[x][y].mineCounter !== 0) {
+      return;
     }
+    const cellPositions = this.getPositionsOfSurroundingCells(x, y);
+    const surroundingMines = cellPositions
+      .map(pos => this.state.mineField[pos[0]][pos[1]])
+      .filter(mine => !mine.isRevealed);
+    surroundingMines.forEach((mine) => {
+      this.revealCell(mine.position.x, mine.position.y);
+    });
   }
-
-  private revealCellByMineField = (cell: IMineField) =>
-  {
-    if (cell.isMine) { return }
-    else {
-      cell.isRevealed   = true
-      cell.isFlagged    = false
-      this.updateState()
-    }
-  }
-
-  private updateState = () => this.setState({})
-
-  private _revealSurroundingCells(x : number, y: number, remain?: IMineField[]) {
-    const coord       =  this.checkSurroundingCells(x, y)
-    const coordFields = coord.map( e => this.state.mineField[e[0]][e[1]])
-    const rem         = coordFields.filter( e => e.mineCounter === 0 && e.isRevealed === false )
-
-    coordFields.map( e => this.revealCellByMineField(e))
-    this.revealSurroundingCells(x,y,rem)
-  }
-
-  private revealSurroundingCells = (x : number, y: number, remain?: IMineField[]) =>
-    remain === undefined 
-      ? this._revealSurroundingCells(x,y) 
-      : remain.forEach( e => this.revealCell(e.placement[0], e.placement[1]) )
 
   private getSurroundingCells(x: number, y: number) {
     return [
@@ -266,7 +261,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
       , []);
   }
 
-  private checkSurroundingCells(x: number, y: number) {
+  private getPositionsOfSurroundingCells(x: number, y: number) {
     return this.constructSurroundingCells(x, y);
   }
 }
