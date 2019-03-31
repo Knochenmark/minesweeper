@@ -12,13 +12,20 @@ const numberColors = {
   8: 'eight',
 };
 
+enum GameStatus {
+  RUNNING,
+  PAUSED,
+  GAME_OVER,
+  VICTORY
+}
+
 interface IPosition {
   x: number;
   y: number;
 }
 
 interface IMineSweeperStateProps {
-  gameStatus: string;
+  gameStatus: GameStatus;
   rows: number;
   columns: number;
   mines: number;
@@ -43,7 +50,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
   constructor(props: IMineSweeperProps) {
     super(props);
     this.state = {
-      gameStatus: '0_0',
+      gameStatus: GameStatus.PAUSED,
       rows: this.props.rows,
       columns: this.props.columns,
       mines: this.props.mines,
@@ -52,9 +59,8 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
   }
 
   public gameOver() {
-    this.setState({ gameStatus: 'X_X' });
+    this.setState({ gameStatus: GameStatus.GAME_OVER });
     this.revealAllMines();
-    console.log('GAMEOVER', this.state.mineField);
   }
 
   public render() {
@@ -105,7 +111,10 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
             <div className="counter">
               <span>{counterText}</span>
             </div>
-            {this.state.gameStatus}
+            {this.state.gameStatus === GameStatus.PAUSED && 'PAUSED'}
+            {this.state.gameStatus === GameStatus.RUNNING && 'RUNNING'}
+            {this.state.gameStatus === GameStatus.GAME_OVER && 'GAME OVER'}
+            {this.state.gameStatus === GameStatus.VICTORY && 'VICTORY'}
             <button onClick={() => this.resetGame()}>Reset</button>
           </div>
           <div className="grid">{grid}</div>
@@ -116,7 +125,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
 
   private resetGame() {
     this.setState({
-      gameStatus: '0_0',
+      gameStatus: GameStatus.PAUSED,
       mineField: this.generateMineField(this.props.rows, this.props.columns, this.props.mines),
     });
   }
@@ -158,6 +167,9 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
   }
 
   private onCellClick(e: React.MouseEvent, x: number, y: number) {
+    if (this.state.gameStatus !== GameStatus.RUNNING) {
+      this.setState({ gameStatus: GameStatus.RUNNING });
+    }
     if (!e.shiftKey && this.isMine(x, y)) {
       this.gameOver();
     } else {
@@ -196,12 +208,22 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     const field = this.state.mineField[x][y];
     field.isRevealed = true;
     field.isFlagged = false;
-    this.setState(
-      {
-        mineField: this.state.mineField,
-      },
-      () => this.revealSurroundingCells(x, y)
-    );
+    const winningCondition = this.state.mineField
+      .reduce((acc: IMineField[], val: IMineField[]) => acc.concat(val), [])
+      .filter((m: IMineField) => !m.isMine && !m.isRevealed).length === 0;
+
+    if (winningCondition) {
+      this.setState({
+        gameStatus: GameStatus.VICTORY
+      })
+    } else {
+      this.setState(
+        {
+          mineField: this.state.mineField,
+        },
+        () => this.revealSurroundingCells(x, y)
+      );
+    }
   };
 
   private revealSurroundingCells(x: number, y: number) {
@@ -236,9 +258,9 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
         return field.isMine
           ? field
           : {
-              ...field,
-              mineCounter: this.countSurroundingMines(x, y, mineField),
-            };
+            ...field,
+            mineCounter: this.countSurroundingMines(x, y, mineField),
+          };
       })
     );
   }
@@ -260,12 +282,12 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
         val[0] < 0
           ? acc
           : val[1] < 0
-          ? acc
-          : val[0] >= this.props.rows
-          ? acc
-          : val[1] >= this.props.columns
-          ? acc
-          : [...acc, val],
+            ? acc
+            : val[0] >= this.props.rows
+              ? acc
+              : val[1] >= this.props.columns
+                ? acc
+                : [...acc, val],
       []
     );
   }
