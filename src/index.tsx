@@ -14,15 +14,14 @@ const mines = 16;
 
 ReactDOM.render(
   <React.Fragment>
-    <a href='https://github.com/Knochenmark/minesweeper/issues' title='Report a bug' className="bug">
+    <a href="https://github.com/Knochenmark/minesweeper/issues" title="Report a bug" className="bug">
       <Bug />
     </a>
-    <a href='https://github.com/Knochenmark' title='Find me on Github' className="github">
+    <a href="https://github.com/Knochenmark" title="Find me on Github" className="github">
       <Github />
     </a>
     <MineSweeper rows={rows} columns={columns} mines={mines} />
-  </React.Fragment>
-  ,
+  </React.Fragment>,
   document.getElementById('root') as HTMLElement
 );
 registerServiceWorker();
