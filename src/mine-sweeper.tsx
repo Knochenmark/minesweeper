@@ -167,7 +167,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
   }
 
   private onCellClick(e: React.MouseEvent, x: number, y: number) {
-    if (this.state.gameStatus === GameStatus.VICTORY) {
+    if (this.state.gameStatus === GameStatus.VICTORY || this.state.gameStatus === GameStatus.GAME_OVER) {
       return;
     }
     if (this.state.gameStatus !== GameStatus.RUNNING) {
