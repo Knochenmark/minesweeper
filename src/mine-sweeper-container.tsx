@@ -33,9 +33,12 @@ export default class MineSweeperContainer extends React.Component<{}, IMineSweep
         <div className="difficulty">
           <h3>Difficulty</h3>
           <div className="difficulty-container">
-            <span onClick={() => this.setDifficulty(Difficulty.EASY)}>Easy</span>
-            <span onClick={() => this.setDifficulty(Difficulty.MEDIUM)}>Medium</span>
-            <span onClick={() => this.setDifficulty(Difficulty.HARD)}>Hard</span>
+            <span className={this.state.difficulty === Difficulty.EASY ? "active" : ""}
+              onClick={() => this.setDifficulty(Difficulty.EASY)}>Easy</span>
+            <span className={this.state.difficulty === Difficulty.MEDIUM ? "active" : ""}
+              onClick={() => this.setDifficulty(Difficulty.MEDIUM)}>Medium</span>
+            <span className={this.state.difficulty === Difficulty.HARD ? "active" : ""}
+              onClick={() => this.setDifficulty(Difficulty.HARD)}>Hard</span>
           </div>
         </div>
         <MineSweeper rows={this.state.rows} columns={this.state.columns} mines={this.state.mines} />

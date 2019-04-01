@@ -12,6 +12,7 @@
   --color-dark-grey: #333333;
   --color-light-grey: #666666;
   --color-grey-1: #e6e7e8;
+  --color-grey-2: #C2C4C6;
 }
 
 *, *:before, *:after {
@@ -54,10 +55,6 @@ a.bug>svg:hover, a.github>svg:hover {
 }
 
 .difficulty {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -75,8 +72,13 @@ a.bug>svg:hover, a.github>svg:hover {
   cursor: pointer;
 }
 
+.difficulty-container>span.active {
+  font-weight: bold;
+  color: var(--color-red);
+}
+
 .game-wrapper {
-  height: 100vh;
+  margin-top: 5rem;
   width: 100vw;
   display: flex;
   justify-content: center;
@@ -89,7 +91,7 @@ a.bug>svg:hover, a.github>svg:hover {
 }
 
 .instructions .hotkey {
-  background-color: #C2C4C6;
+  background-color: var(--color-grey-2);
   color: var(--color-red);
   font-weight: 600;
 }
@@ -113,8 +115,8 @@ a.bug>svg:hover, a.github>svg:hover {
 }
 
 .mine-sweeper {
-  border: 6px solid #C2C4C6;
-  background-color: #C2C4C6;
+  border: 6px solid var(--color-grey-2);
+  background-color: var(--color-grey-2);
   text-align: center;
   position: relative;
   display: inline-block;
