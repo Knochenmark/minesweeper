@@ -58,6 +58,19 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     };
   }
 
+  public componentDidUpdate(prevProps: IMineSweeperProps) {
+    const { rows, columns, mines } = this.props;
+    if (rows !== prevProps.rows) {
+      this.setState({
+        ...this.state,
+        rows,
+        columns,
+        mines,
+        mineField: this.generateMineField(rows, columns, mines)
+      });
+    }
+  }
+
   public gameOver() {
     this.setState({ gameStatus: GameStatus.GAME_OVER });
     this.revealAllMines();
