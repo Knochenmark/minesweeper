@@ -16,7 +16,7 @@ enum GameStatus {
   RUNNING,
   PAUSED,
   GAME_OVER,
-  VICTORY
+  VICTORY,
 }
 
 interface IPosition {
@@ -60,13 +60,13 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
 
   public componentDidUpdate(prevProps: IMineSweeperProps) {
     const { rows, columns, mines } = this.props;
-    if (rows !== prevProps.rows) {
+    if (rows !== prevProps.rows || columns !== prevProps.columns || mines !== prevProps.mines) {
       this.setState({
         ...this.state,
         rows,
         columns,
         mines,
-        mineField: this.generateMineField(rows, columns, mines)
+        mineField: this.generateMineField(rows, columns, mines),
       });
     }
   }
@@ -224,14 +224,15 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     const field = this.state.mineField[x][y];
     field.isRevealed = true;
     field.isFlagged = false;
-    const winningCondition = this.state.mineField
-      .reduce((acc: IMineField[], val: IMineField[]) => acc.concat(val), [])
-      .filter((m: IMineField) => !m.isMine && !m.isRevealed).length === 0;
+    const winningCondition =
+      this.state.mineField
+        .reduce((acc: IMineField[], val: IMineField[]) => acc.concat(val), [])
+        .filter((m: IMineField) => !m.isMine && !m.isRevealed).length === 0;
 
     if (winningCondition) {
       this.setState({
-        gameStatus: GameStatus.VICTORY
-      })
+        gameStatus: GameStatus.VICTORY,
+      });
     } else {
       this.setState(
         {
@@ -274,9 +275,9 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
         return field.isMine
           ? field
           : {
-            ...field,
-            mineCounter: this.countSurroundingMines(x, y, mineField),
-          };
+              ...field,
+              mineCounter: this.countSurroundingMines(x, y, mineField),
+            };
       })
     );
   }
@@ -298,12 +299,12 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
         val[0] < 0
           ? acc
           : val[1] < 0
-            ? acc
-            : val[0] >= this.props.rows
-              ? acc
-              : val[1] >= this.props.columns
-                ? acc
-                : [...acc, val],
+          ? acc
+          : val[0] >= this.props.rows
+          ? acc
+          : val[1] >= this.props.columns
+          ? acc
+          : [...acc, val],
       []
     );
   }

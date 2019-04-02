@@ -12,7 +12,7 @@ interface IMineSweeperContainerStateProps {
 enum Difficulty {
   EASY,
   MEDIUM,
-  HARD
+  HARD,
 }
 
 export default class MineSweeperContainer extends React.Component<{}, IMineSweeperContainerStateProps> {
@@ -23,8 +23,8 @@ export default class MineSweeperContainer extends React.Component<{}, IMineSweep
       difficulty: Difficulty.EASY,
       rows,
       columns,
-      mines
-    }
+      mines,
+    };
   }
 
   public render() {
@@ -33,12 +33,24 @@ export default class MineSweeperContainer extends React.Component<{}, IMineSweep
         <div className="difficulty">
           <h3>Difficulty</h3>
           <div className="difficulty-container">
-            <span className={this.state.difficulty === Difficulty.EASY ? "active" : ""}
-              onClick={() => this.setDifficulty(Difficulty.EASY)}>Easy</span>
-            <span className={this.state.difficulty === Difficulty.MEDIUM ? "active" : ""}
-              onClick={() => this.setDifficulty(Difficulty.MEDIUM)}>Medium</span>
-            <span className={this.state.difficulty === Difficulty.HARD ? "active" : ""}
-              onClick={() => this.setDifficulty(Difficulty.HARD)}>Hard</span>
+            <span
+              className={this.state.difficulty === Difficulty.EASY ? 'active' : ''}
+              onClick={() => this.setDifficulty(Difficulty.EASY)}
+            >
+              Easy
+            </span>
+            <span
+              className={this.state.difficulty === Difficulty.MEDIUM ? 'active' : ''}
+              onClick={() => this.setDifficulty(Difficulty.MEDIUM)}
+            >
+              Medium
+            </span>
+            <span
+              className={this.state.difficulty === Difficulty.HARD ? 'active' : ''}
+              onClick={() => this.setDifficulty(Difficulty.HARD)}
+            >
+              Hard
+            </span>
           </div>
         </div>
         <MineSweeper rows={this.state.rows} columns={this.state.columns} mines={this.state.mines} />
@@ -46,11 +58,11 @@ export default class MineSweeperContainer extends React.Component<{}, IMineSweep
     );
   }
 
-  private getDifficultySettings(difficulty: Difficulty): { rows: number, columns: number, mines: number } {
+  private getDifficultySettings(difficulty: Difficulty): { rows: number; columns: number; mines: number } {
     return {
-      0: { rows: 6, columns: 12, mines: 16 },
-      1: { rows: 10, columns: 18, mines: 32 },
-      2: { rows: 14, columns: 24, mines: 64 },
+      0: { rows: 8, columns: 8, mines: 10 },
+      1: { rows: 16, columns: 16, mines: 40 },
+      2: { rows: 16, columns: 30, mines: 99 },
     }[difficulty];
   }
 
