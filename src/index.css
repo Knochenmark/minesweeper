@@ -12,10 +12,12 @@
   --color-dark-grey: #333333;
   --color-light-grey: #666666;
   --color-grey-1: #e6e7e8;
-  --color-grey-2: #C2C4C6;
+  --color-grey-2: #c2c4c6;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: border-box;
 }
 
@@ -27,7 +29,8 @@ body {
   background-color: var(--color-grey-1);
 }
 
-a.bug, a.github {
+a.bug,
+a.github {
   width: var(--cell-size);
   height: var(--cell-size);
   position: absolute;
@@ -45,11 +48,13 @@ a.bug {
   transform: rotate(45deg);
 }
 
-a.bug>svg, a.github>svg {
+a.bug > svg,
+a.github > svg {
   fill: var(--color-light-grey);
 }
 
-a.bug>svg:hover, a.github>svg:hover {
+a.bug > svg:hover,
+a.github > svg:hover {
   fill: var(--color-red);
   cursor: pointer;
 }
@@ -67,14 +72,31 @@ a.bug>svg:hover, a.github>svg:hover {
   align-items: center;
 }
 
-.difficulty-container>span {
+.difficulty-container > span {
   margin: 0 10px;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.difficulty-container>span.active {
+.difficulty-container > span.active {
   font-weight: bold;
   color: var(--color-red);
+}
+
+.difficulty-mine-container {
+  display: flex;
+}
+
+.difficulty-mine::after {
+  display: block;
+  content: '';
+  background-image: url(/static/media/mine.c9ea0a3a.svg);
+  background-size: 12px 12px;
+  height: 12px;
+  width: 12px;
+  margin: 2px;
 }
 
 .game-wrapper {
@@ -107,7 +129,7 @@ a.bug>svg:hover, a.github>svg:hover {
   padding: 0 4px;
   border: 3px inset;
   line-height: var(--cell-size);
-  letter-spacing: .08em;
+  letter-spacing: 0.08em;
   display: inline-block;
   color: var(--color-red);
   background: var(--color-dark-grey);
@@ -149,7 +171,7 @@ a.bug>svg:hover, a.github>svg:hover {
 }
 
 .grid-cell:hover {
-  background-color: #eee
+  background-color: #eee;
 }
 
 .grid-cell.revealed {
