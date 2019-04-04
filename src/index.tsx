@@ -13,9 +13,16 @@ ReactDOM.render(
     <a href="https://github.com/Knochenmark/minesweeper/issues" title="Report a bug" className="bug">
       <Bug />
     </a>
-    <a href="https://github.com/Knochenmark" title="Find me on Github" className="github">
-      <Github />
-    </a>
+    <div className="github-container">
+      <a href="https://github.com/Knochenmark" title="Find me on Github" className="github">
+        <Github />
+        Knochenmark
+      </a>
+      <a href="https://github.com/Psyperl" title="Find me on Github" className="github">
+        <Github />
+        Psyperl
+      </a>
+    </div>
     <MineSweeperContainer />
   </React.Fragment>,
   document.getElementById('root') as HTMLElement

@@ -29,32 +29,59 @@ body {
   background-color: var(--color-grey-1);
 }
 
-a.bug,
-a.github {
+.github-container {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 1;
+}
+
+.github-container > a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px 0;
+  font-size: 0.8rem;
+  text-decoration: none;
+  color: var(--color-light-grey);
+}
+
+.github-container > a:hover {
+  color: var(--color-red);
+  cursor: pointer;
+}
+
+.github-container > a:hover > svg {
+  fill: var(--color-red);
+}
+
+.github-container svg {
+  margin-right: 5px;
+  fill: var(--color-light-grey);
+}
+
+a.bug {
   width: var(--cell-size);
   height: var(--cell-size);
   position: absolute;
   top: 0.5rem;
-  left: 0.5rem;
+  right: 0.5rem;
   z-index: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-a.bug {
-  left: unset;
-  right: 0.5rem;
   transform: rotate(45deg);
 }
 
-a.bug > svg,
-a.github > svg {
+a.bug > svg {
   fill: var(--color-light-grey);
 }
 
-a.bug > svg:hover,
-a.github > svg:hover {
+a.bug > svg:hover {
   fill: var(--color-red);
   cursor: pointer;
 }
@@ -78,6 +105,7 @@ a.github > svg:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
+  user-select: none;
 }
 
 .difficulty-container > span.active {
