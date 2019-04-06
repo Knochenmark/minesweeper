@@ -1,6 +1,5 @@
 :root {
   --cell-size: 30px;
-
   --number-color-one: blue;
   --number-color-two: green;
   --number-color-three: red;
@@ -9,19 +8,17 @@
   --number-color-six: turquoise;
   --number-color-seven: black;
   --number-color-eight: gray;
-
   --color-red: #ec433c;
   --color-dark-grey: #333333;
   --color-medium-grey: #666666;
   --color-grey-1: #e6e7e8;
   --color-grey-2: #c2c4c6;
   --color-light-grey-1: #dddddd;
-  --color-light-grey-2: #eeeeee; /* TODO Consider filter with brightness for highlights */
+  --color-light-grey-2: #eeeeee;
+  /* TODO Consider filter with brightness for highlights */
 }
 
-*,
-*:before,
-*:after {
+*, *:before, *:after {
   box-sizing: border-box;
 }
 
@@ -44,7 +41,7 @@ body {
   z-index: 1;
 }
 
-.github-container > a {
+.github-container>a {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,12 +51,12 @@ body {
   color: var(--color-medium-grey);
 }
 
-.github-container > a:hover {
+.github-container>a:hover {
   color: var(--color-red);
   cursor: pointer;
 }
 
-.github-container > a:hover > svg {
+.github-container>a:hover>svg {
   fill: var(--color-red);
 }
 
@@ -81,11 +78,11 @@ a.bug {
   transform: rotate(45deg);
 }
 
-a.bug > svg {
+a.bug>svg {
   fill: var(--color-medium-grey);
 }
 
-a.bug > svg:hover {
+a.bug>svg:hover {
   fill: var(--color-red);
   cursor: pointer;
 }
@@ -103,7 +100,7 @@ a.bug > svg:hover {
   align-items: center;
 }
 
-.difficulty-container > span {
+.difficulty-container>span {
   margin: 0 10px;
   cursor: pointer;
   display: flex;
@@ -112,7 +109,7 @@ a.bug > svg:hover {
   user-select: none;
 }
 
-.difficulty-container > span.active {
+.difficulty-container>span.active {
   font-weight: bold;
   color: var(--color-red);
 }
@@ -157,7 +154,9 @@ a.bug > svg:hover {
   margin-bottom: 18px;
 }
 
+.timer,
 .counter {
+  user-select: none;
   padding: 0 4px;
   border: 3px inset;
   line-height: var(--cell-size);
@@ -166,6 +165,25 @@ a.bug > svg:hover {
   color: var(--color-red);
   background: var(--color-dark-grey);
   text-shadow: 0 0 2px var(--color-red);
+}
+
+.game-status {
+  height: 36px;
+  width: 36px;
+  background-color: var(--color-light-grey-1);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-width: 3px;
+  border-style: solid;
+  border-color: white #9e9e9e #9e9e9e white;
+}
+
+.game-status>svg {
+  background-color: gold;
+  border-radius: 50%;
+  fill: black;
 }
 
 .mine-sweeper {
