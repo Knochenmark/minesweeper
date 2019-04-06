@@ -3,8 +3,8 @@ import './index.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import Bug from './icons/Bug';
-import Github from './icons/Github';
+import Bug from './icons/bug';
+import Github from './icons/github';
 import MineSweeperContainer from './mine-sweeper-container';
 import registerServiceWorker from './registerServiceWorker';
 
