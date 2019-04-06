@@ -62,6 +62,14 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     };
   }
 
+  public componentDidMount() {
+    document.addEventListener("keydown", (e) => this.onKeyDown(e));
+  }
+
+  public componentWillUnmount() {
+    document.removeEventListener("keydown", (e) => this.onKeyDown(e));
+  }
+
   public componentDidUpdate(prevProps: IMineSweeperProps) {
     const { rows, columns, mines } = this.props;
     if (rows !== prevProps.rows || columns !== prevProps.columns || mines !== prevProps.mines) {
@@ -143,6 +151,12 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
         </div>
       </div>
     );
+  }
+
+  private onKeyDown(e: any) {
+    if (this.state.gameStatus !== GameStatus.PAUSED && e.keyCode === 82) {
+      this.resetGame();
+    }
   }
 
   private resetGame() {
