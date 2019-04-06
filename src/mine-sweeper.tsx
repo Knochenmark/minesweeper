@@ -1,5 +1,9 @@
 import * as React from 'react';
 
+import SmileyDead from './icons/smiley-dead';
+import SmileyLaugh from './icons/smiley-laugh';
+import SmileySunGlasses from './icons/smiley-sunglasses';
+
 const numberColors = {
   0: '',
   1: 'one',
@@ -124,11 +128,16 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
             <div className="counter">
               <span>{counterText}</span>
             </div>
-            {this.state.gameStatus === GameStatus.PAUSED && 'PAUSED'}
-            {this.state.gameStatus === GameStatus.RUNNING && 'RUNNING'}
-            {this.state.gameStatus === GameStatus.GAME_OVER && 'GAME OVER'}
-            {this.state.gameStatus === GameStatus.VICTORY && 'VICTORY'}
-            <button onClick={() => this.resetGame()}>Reset</button>
+            <div className="game-status" onClick={() => this.resetGame()}>
+              {this.state.gameStatus === GameStatus.PAUSED && <SmileyLaugh />}
+              {this.state.gameStatus === GameStatus.RUNNING && <SmileyLaugh />}
+              {this.state.gameStatus === GameStatus.GAME_OVER && <SmileyDead />}
+              {this.state.gameStatus === GameStatus.VICTORY && <SmileySunGlasses />}
+            </div>
+            <div className="timer">
+              {/* TODO: Add actual timer */}
+              <span>00</span>
+            </div>
           </div>
           <div className="grid">{grid}</div>
         </div>
@@ -275,9 +284,9 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
         return field.isMine
           ? field
           : {
-              ...field,
-              mineCounter: this.countSurroundingMines(x, y, mineField),
-            };
+            ...field,
+            mineCounter: this.countSurroundingMines(x, y, mineField),
+          };
       })
     );
   }
@@ -299,12 +308,12 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
         val[0] < 0
           ? acc
           : val[1] < 0
-          ? acc
-          : val[0] >= this.props.rows
-          ? acc
-          : val[1] >= this.props.columns
-          ? acc
-          : [...acc, val],
+            ? acc
+            : val[0] >= this.props.rows
+              ? acc
+              : val[1] >= this.props.columns
+                ? acc
+                : [...acc, val],
       []
     );
   }
