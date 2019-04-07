@@ -126,18 +126,12 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
 
     return (
       <div className="game-wrapper">
-        <h1>Minesweeper</h1>
-        <div className="instructions">
-          <span>
-            To flag cells use <span className="hotkey">shift + click</span>
-          </span>
-        </div>
         <div className="mine-sweeper">
           <div className="game-state">
             <div className="counter">
               <span>{counterText}</span>
             </div>
-            <div className="game-status" onClick={() => this.resetGame()}>
+            <div className="game-status" onClick={() => this.resetGame()} title="Reset the game">
               {this.state.gameStatus === GameStatus.PAUSED && <SmileyLaugh />}
               {this.state.gameStatus === GameStatus.RUNNING && <SmileyLaugh />}
               {this.state.gameStatus === GameStatus.GAME_OVER && <SmileyDead />}
