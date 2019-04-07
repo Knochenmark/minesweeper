@@ -87,11 +87,12 @@ a.bug>svg:hover {
   cursor: pointer;
 }
 
-.difficulty {
+.header, .difficulty {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin-top: 2rem;
 }
 
 .difficulty-container {
@@ -129,7 +130,7 @@ a.bug>svg:hover {
 }
 
 .game-wrapper {
-  margin-top: 5rem;
+  margin-top: 2rem;
   width: 100vw;
   display: flex;
   justify-content: center;
@@ -139,6 +140,14 @@ a.bug>svg:hover {
 
 .instructions {
   margin-bottom: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.instructions>span {
+  margin: 5px 0;
 }
 
 .instructions .hotkey {
@@ -154,8 +163,7 @@ a.bug>svg:hover {
   margin-bottom: 18px;
 }
 
-.timer,
-.counter {
+.timer, .counter {
   user-select: none;
   padding: 0 4px;
   border: 3px inset;

@@ -30,6 +30,17 @@ export default class MineSweeperContainer extends React.Component<{}, IMineSweep
   public render() {
     return (
       <React.Fragment>
+        <div className="header">
+          <h1>Minesweeper</h1>
+          <div className="instructions">
+            <span>
+              To flag cells use <span className="hotkey">shift + click</span>.
+            </span>
+            <span>
+              To reset the game press the <span className="hotkey">R</span> key or the <span className="hotkey">smiley</span> button.
+            </span>
+          </div>
+        </div>
         <div className="difficulty">
           <h3>Difficulty</h3>
           <div className="difficulty-container">
