@@ -78,6 +78,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
         rows,
         columns,
         mines,
+        gameStatus: GameStatus.PAUSED,
         mineField: this.generateMineField(rows, columns, mines),
       });
     }
