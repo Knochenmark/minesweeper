@@ -105,7 +105,8 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
           <div
             key={`cell-${i}-${j}`}
             className={`grid-cell${revealed}${revealedMine}${flagged} ${num}`}
-            onClick={(e) => this.onCellClick(e, i, j)}
+            onClick={() => this.onCellClick(i, j)}
+            onContextMenu={(e) => this.onCellRightClick(e, i, j)}
           >
             {mineCounter}
           </div>
@@ -197,18 +198,19 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     return this.setMineCounters(this.placeMinesOnField(this.createEmptyMineField(rows, columns), rows, columns, mines));
   }
 
-  private onCellClick(e: React.MouseEvent, x: number, y: number) {
+  private onCellClick(x: number, y: number) {
     if (this.state.gameStatus === GameStatus.VICTORY || this.state.gameStatus === GameStatus.GAME_OVER) {
       return;
     }
     if (this.state.gameStatus !== GameStatus.RUNNING) {
       this.setState({ gameStatus: GameStatus.RUNNING });
     }
-    if (!e.shiftKey && this.isMine(x, y)) {
-      this.gameOver();
-    } else {
-      e.shiftKey ? this.toggleFlagged(x, y) : this.revealCell(x, y);
-    }
+    this.isMine(x, y) ? this.gameOver() : this.revealCell(x, y);
+  }
+
+  private onCellRightClick(e: React.MouseEvent, x: number, y: number) {
+    e.preventDefault();
+    this.toggleFlagged(x, y);
   }
 
   private isMine = (x: number, y: number): boolean => this.state.mineField[x][y].isMine;
