@@ -63,11 +63,11 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
   }
 
   public componentDidMount() {
-    document.addEventListener("keydown", (e) => this.onKeyDown(e));
+    document.addEventListener('keydown', (e) => this.onKeyDown(e));
   }
 
   public componentWillUnmount() {
-    document.removeEventListener("keydown", (e) => this.onKeyDown(e));
+    document.removeEventListener('keydown', (e) => this.onKeyDown(e));
   }
 
   public componentDidUpdate(prevProps: IMineSweeperProps) {
@@ -105,7 +105,8 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
           <div
             key={`cell-${i}-${j}`}
             className={`grid-cell${revealed}${revealedMine}${flagged} ${num}`}
-            onClick={(e) => this.onCellClick(e, i, j)}
+            onClick={() => this.onCellClick(i, j)}
+            onContextMenu={(e) => this.onCellRightClick(e, i, j)}
           >
             {mineCounter}
           </div>
@@ -197,18 +198,19 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     return this.setMineCounters(this.placeMinesOnField(this.createEmptyMineField(rows, columns), rows, columns, mines));
   }
 
-  private onCellClick(e: React.MouseEvent, x: number, y: number) {
+  private onCellClick(x: number, y: number) {
     if (this.state.gameStatus === GameStatus.VICTORY || this.state.gameStatus === GameStatus.GAME_OVER) {
       return;
     }
     if (this.state.gameStatus !== GameStatus.RUNNING) {
       this.setState({ gameStatus: GameStatus.RUNNING });
     }
-    if (!e.shiftKey && this.isMine(x, y)) {
-      this.gameOver();
-    } else {
-      e.shiftKey ? this.toggleFlagged(x, y) : this.revealCell(x, y);
-    }
+    this.isMine(x, y) ? this.gameOver() : this.revealCell(x, y);
+  }
+
+  private onCellRightClick(e: React.MouseEvent, x: number, y: number) {
+    e.preventDefault();
+    this.toggleFlagged(x, y);
   }
 
   private isMine = (x: number, y: number): boolean => this.state.mineField[x][y].isMine;
@@ -293,9 +295,9 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
         return field.isMine
           ? field
           : {
-            ...field,
-            mineCounter: this.countSurroundingMines(x, y, mineField),
-          };
+              ...field,
+              mineCounter: this.countSurroundingMines(x, y, mineField),
+            };
       })
     );
   }
@@ -317,12 +319,12 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
         val[0] < 0
           ? acc
           : val[1] < 0
-            ? acc
-            : val[0] >= this.props.rows
-              ? acc
-              : val[1] >= this.props.columns
-                ? acc
-                : [...acc, val],
+          ? acc
+          : val[0] >= this.props.rows
+          ? acc
+          : val[1] >= this.props.columns
+          ? acc
+          : [...acc, val],
       []
     );
   }
