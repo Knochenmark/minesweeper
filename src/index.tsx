@@ -27,4 +27,6 @@ ReactDOM.render(
   </React.Fragment>,
   document.getElementById('root') as HTMLElement
 );
+
+document.oncontextmenu = () => false;
 registerServiceWorker();

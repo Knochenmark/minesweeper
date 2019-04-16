@@ -298,9 +298,9 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
         return field.isMine
           ? field
           : {
-            ...field,
-            mineCounter: this.countSurroundingMines(x, y, mineField),
-          };
+              ...field,
+              mineCounter: this.countSurroundingMines(x, y, mineField),
+            };
       })
     );
   }
@@ -322,12 +322,12 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
         val[0] < 0
           ? acc
           : val[1] < 0
-            ? acc
-            : val[0] >= this.props.rows
-              ? acc
-              : val[1] >= this.props.columns
-                ? acc
-                : [...acc, val],
+          ? acc
+          : val[0] >= this.props.rows
+          ? acc
+          : val[1] >= this.props.columns
+          ? acc
+          : [...acc, val],
       []
     );
   }
