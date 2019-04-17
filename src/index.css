@@ -18,7 +18,9 @@
   /* TODO Consider filter with brightness for highlights */
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: border-box;
 }
 
@@ -41,7 +43,7 @@ body {
   z-index: 1;
 }
 
-.github-container>a {
+.github-container > a {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -51,12 +53,12 @@ body {
   color: var(--color-medium-grey);
 }
 
-.github-container>a:hover {
+.github-container > a:hover {
   color: var(--color-red);
   cursor: pointer;
 }
 
-.github-container>a:hover>svg {
+.github-container > a:hover > svg {
   fill: var(--color-red);
 }
 
@@ -78,16 +80,17 @@ a.bug {
   transform: rotate(45deg);
 }
 
-a.bug>svg {
+a.bug > svg {
   fill: var(--color-medium-grey);
 }
 
-a.bug>svg:hover {
+a.bug > svg:hover {
   fill: var(--color-red);
   cursor: pointer;
 }
 
-.header, .difficulty {
+.header,
+.difficulty {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -101,7 +104,7 @@ a.bug>svg:hover {
   align-items: center;
 }
 
-.difficulty-container>span {
+.difficulty-container > span {
   margin: 0 10px;
   cursor: pointer;
   display: flex;
@@ -110,7 +113,7 @@ a.bug>svg:hover {
   user-select: none;
 }
 
-.difficulty-container>span.active {
+.difficulty-container > span.active {
   font-weight: bold;
   color: var(--color-red);
 }
@@ -146,7 +149,7 @@ a.bug>svg:hover {
   flex-direction: column;
 }
 
-.instructions>span {
+.instructions > span {
   margin: 5px 0;
 }
 
@@ -163,7 +166,12 @@ a.bug>svg:hover {
   margin-bottom: 18px;
 }
 
-.timer, .counter {
+.timer,
+.counter {
+  font-size: 18px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  width: 40px;
   user-select: none;
   padding: 0 4px;
   border: 3px inset;
@@ -173,6 +181,12 @@ a.bug>svg:hover {
   color: var(--color-red);
   background: var(--color-dark-grey);
   text-shadow: 0 0 2px var(--color-red);
+}
+
+.timer > span,
+.counter > span {
+  margin-right: -0.08em; /* To remove letter spacing from last letter */
+  vertical-align: middle;
 }
 
 .game-status {
@@ -188,7 +202,7 @@ a.bug>svg:hover {
   border-color: white #9e9e9e #9e9e9e white;
 }
 
-.game-status>svg {
+.game-status > svg {
   background-color: gold;
   border-radius: 50%;
   fill: black;
