@@ -30,6 +30,7 @@ interface IPosition {
 
 interface IMineSweeperStateProps {
   gameStatus: GameStatus;
+  score: number;
   rows: number;
   columns: number;
   mines: number;
@@ -51,9 +52,12 @@ interface IMineSweeperProps {
 }
 
 export default class MineSweeper extends React.Component<IMineSweeperProps, IMineSweeperStateProps> {
+  private timerId: number;
+
   constructor(props: IMineSweeperProps) {
     super(props);
     this.state = {
+      score: 0,
       gameStatus: GameStatus.PAUSED,
       rows: this.props.rows,
       columns: this.props.columns,
@@ -73,11 +77,13 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
   public componentDidUpdate(prevProps: IMineSweeperProps) {
     const { rows, columns, mines } = this.props;
     if (rows !== prevProps.rows || columns !== prevProps.columns || mines !== prevProps.mines) {
+      this.clearTimer();
       this.setState({
         ...this.state,
         rows,
         columns,
         mines,
+        score: 0,
         gameStatus: GameStatus.PAUSED,
         mineField: this.generateMineField(rows, columns, mines),
       });
@@ -85,6 +91,8 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
   }
 
   public gameOver() {
+    this.clearTimer();
+    // TODO: Use this.state.score as Highscore
     this.setState({ gameStatus: GameStatus.GAME_OVER });
     this.revealAllMines();
   }
@@ -123,7 +131,8 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
       .reduce((acc: IMineField[], val: IMineField[]) => acc.concat(val), [])
       .filter((m: IMineField) => m.isFlagged && !m.isRevealed).length;
     const counter = this.props.mines - flagCounter;
-    const counterText = counter < 10 ? `0${counter}` : `${counter}`;
+    const counterText = this.toDisplayNumber(counter);
+    const timerText = this.toDisplayNumber(this.state.score);
 
     return (
       <div className="game-wrapper">
@@ -139,8 +148,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
               {this.state.gameStatus === GameStatus.VICTORY && <SmileySunGlasses />}
             </div>
             <div className="timer">
-              {/* TODO: Add actual timer */}
-              <span>00</span>
+              <span>{timerText}</span>
             </div>
           </div>
           <div className="grid">{grid}</div>
@@ -149,14 +157,31 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     );
   }
 
+  private toDisplayNumber(num: number) {
+    let displayNumber = '';
+    if (num < 100) {
+      displayNumber += '0';
+    }
+    if (num < 10) {
+      displayNumber += '0';
+    }
+    return displayNumber.concat(String(num));
+  }
+
   private onKeyDown(e: any) {
     if (this.state.gameStatus !== GameStatus.PAUSED && e.keyCode === 82) {
       this.resetGame();
     }
   }
 
+  private clearTimer() {
+    window.clearInterval(this.timerId);
+  }
+
   private resetGame() {
+    this.clearTimer();
     this.setState({
+      score: 0,
       gameStatus: GameStatus.PAUSED,
       mineField: this.generateMineField(this.props.rows, this.props.columns, this.props.mines),
     });
@@ -198,12 +223,22 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     return this.setMineCounters(this.placeMinesOnField(this.createEmptyMineField(rows, columns), rows, columns, mines));
   }
 
+  private updateTimer() {
+    const score = this.state.score + 1;
+    this.setState({
+      score,
+    });
+  }
+
   private onCellClick(x: number, y: number) {
     if (this.state.gameStatus === GameStatus.VICTORY || this.state.gameStatus === GameStatus.GAME_OVER) {
       return;
     }
     if (this.state.gameStatus !== GameStatus.RUNNING) {
-      this.setState({ gameStatus: GameStatus.RUNNING });
+      this.setState({
+        gameStatus: GameStatus.RUNNING,
+      });
+      this.timerId = window.setInterval(this.updateTimer.bind(this), 1000);
     }
     this.isMine(x, y) ? this.gameOver() : this.revealCell(x, y);
   }
@@ -253,6 +288,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
         .filter((m: IMineField) => !m.isMine && !m.isRevealed).length === 0;
 
     if (winningCondition) {
+      this.clearTimer();
       this.setState({
         gameStatus: GameStatus.VICTORY,
       });
