@@ -171,7 +171,7 @@ a.bug > svg:hover {
   font-size: 18px;
   font-family: 'Courier New', Courier, monospace;
   font-weight: bold;
-  width: 40px;
+  width: 48px;
   user-select: none;
   padding: 0 4px;
   border: 3px inset;
@@ -181,12 +181,6 @@ a.bug > svg:hover {
   color: var(--color-red);
   background: var(--color-dark-grey);
   text-shadow: 0 0 2px var(--color-red);
-}
-
-.timer > span,
-.counter > span {
-  margin-right: -0.08em; /* To remove letter spacing from last letter */
-  vertical-align: middle;
 }
 
 .game-status {
