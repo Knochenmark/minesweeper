@@ -158,6 +158,9 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
   }
 
   private toDisplayNumber(num: number) {
+    if (num > 999) {
+      return '999';
+    }
     let displayNumber = '';
     if (num < 100) {
       displayNumber += '0';
