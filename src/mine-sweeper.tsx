@@ -257,6 +257,9 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
 
   private onCellDoubleClick(e: React.MouseEvent, x: number, y: number) {
     e.preventDefault();
+    if (this.state.gameStatus === GameStatus.VICTORY || this.state.gameStatus === GameStatus.GAME_OVER) {
+      return;
+    }
     const mine = this.state.mineField[x][y];
     if (mine.isRevealed) {
       this.perimeterReveal(x, y);

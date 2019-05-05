@@ -37,6 +37,9 @@ export default class MineSweeperContainer extends React.Component<{}, IMineSweep
               To flag cells use <span className="hotkey">right click</span>.
             </span>
             <span>
+              To perimeter check already revealed cells use <span className="hotkey">double click</span>.
+            </span>
+            <span>
               To reset the game press the <span className="hotkey">R</span> key or the{' '}
               <span className="hotkey">smiley</span> button.
             </span>
