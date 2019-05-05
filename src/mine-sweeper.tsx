@@ -115,6 +115,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
             className={`grid-cell${revealed}${revealedMine}${flagged} ${num}`}
             onClick={() => this.onCellClick(i, j)}
             onContextMenu={(e) => this.onCellRightClick(e, i, j)}
+            onDoubleClick={(e) => this.onCellDoubleClick(e, i, j)}
           >
             {mineCounter}
           </div>
@@ -254,6 +255,14 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     this.toggleFlagged(x, y);
   }
 
+  private onCellDoubleClick(e: React.MouseEvent, x: number, y: number) {
+    e.preventDefault();
+    const mine = this.state.mineField[x][y];
+    if (mine.isRevealed) {
+      this.perimeterReveal(x, y);
+    }
+  }
+
   private isMine = (x: number, y: number): boolean => this.state.mineField[x][y].isMine;
 
   private revealAllMines() {
@@ -304,6 +313,16 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
       );
     }
   };
+
+  private perimeterReveal(x: number, y: number) {
+    const cellPositions = this.getPositionsOfSurroundingCells(x, y);
+    const surroundingMines = cellPositions
+      .map((pos) => this.state.mineField[pos[0]][pos[1]])
+      .filter((mine) => !mine.isRevealed && !mine.isFlagged);
+    surroundingMines.forEach((mine) => {
+      mine.isMine ? this.gameOver() : this.revealCell(mine.position.x, mine.position.y);
+    });
+  }
 
   private revealSurroundingCells(x: number, y: number) {
     if (this.state.mineField[x][y].mineCounter !== 0) {
