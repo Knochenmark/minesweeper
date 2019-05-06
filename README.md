@@ -17,7 +17,7 @@ This is a Minesweeper game 💥
 ## Pre-Requisites
 
 This project requires [Node.js](https://nodejs.org) 6.x or later to be installed.<br>
-Use either `npm install` or `yarn install` to download dependencies locally.
+Use `npm install` to download dependencies locally.
 
 ## Run the app
 
