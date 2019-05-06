@@ -3,16 +3,11 @@
   "name": "minesweeper",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-scripts-ts": "^4.0.8"
-  },
   "scripts": {
-    "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
     "deploy": "npm run test && npm run build",
     "prettify": "prettier --write \"**/*.{ts,tsx}\""
   },
@@ -21,12 +16,18 @@
       "pre-commit": "pretty-quick --staged"
     }
   },
+  "dependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "^3.0.0"
+  },
   "devDependencies": {
     "@types/jest": "^24.0.12",
     "@types/node": "^12.0.0",
     "@types/react": "16.8.16",
     "@types/react-dom": "^16.8.4",
     "husky": "^2.2.0",
+    "prettier": "^1.17.0",
     "pretty-quick": "^1.10.0",
     "typescript": "^3.4.5"
   },
