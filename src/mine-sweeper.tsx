@@ -271,7 +271,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
   private revealAllMines() {
     const mineField = this.state.mineField;
     mineField.map((row) =>
-      row.map((field) => {
+      row.forEach((field) => {
         if (field.isMine) {
           field.isRevealed = true;
           field.isFlagged = false;
@@ -320,9 +320,9 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
   private perimeterReveal(x: number, y: number) {
     const cellPositions = this.getPositionsOfSurroundingCells(x, y);
     const surroundingMines = cellPositions
-      .map((pos) => this.state.mineField[pos[0]][pos[1]])
-      .filter((mine) => !mine.isRevealed && !mine.isFlagged);
-    surroundingMines.forEach((mine) => {
+      .map((pos: IPosition) => this.state.mineField[pos[0]][pos[1]])
+      .filter((mine: IMineField) => !mine.isRevealed && !mine.isFlagged);
+    surroundingMines.forEach((mine: IMineField) => {
       mine.isMine ? this.gameOver() : this.revealCell(mine.position.x, mine.position.y);
     });
   }
@@ -333,9 +333,9 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     }
     const cellPositions = this.getPositionsOfSurroundingCells(x, y);
     const surroundingMines = cellPositions
-      .map((pos) => this.state.mineField[pos[0]][pos[1]])
-      .filter((mine) => !mine.isRevealed);
-    surroundingMines.forEach((mine) => {
+      .map((pos: Position) => this.state.mineField[pos[0]][pos[1]])
+      .filter((mine: IMineField) => !mine.isRevealed);
+    surroundingMines.forEach((mine: IMineField) => {
       this.revealCell(mine.position.x, mine.position.y);
     });
   }
@@ -379,7 +379,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
 
   private constructSurroundingCells(x: number, y: number) {
     return this.getSurroundingCells(x, y).reduce(
-      (acc, val) =>
+      (acc: any, val) =>
         val[0] < 0
           ? acc
           : val[1] < 0
