@@ -17,19 +17,19 @@
     }
   },
   "dependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-scripts": "^3.0.0"
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "react-scripts": "^3.2.0"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.12",
-    "@types/node": "^12.7.9",
+    "@types/jest": "^24.0.19",
+    "@types/node": "^12.11.1",
     "@types/react": "16.9.7",
-    "@types/react-dom": "^16.8.4",
+    "@types/react-dom": "^16.9.2",
     "husky": "^3.0.0",
-    "prettier": "^1.17.0",
+    "prettier": "^1.18.2",
     "pretty-quick": "^2.0.0",
-    "typescript": "^3.4.5"
+    "typescript": "^3.6.4"
   },
   "browserslist": [
     ">0.2%",
