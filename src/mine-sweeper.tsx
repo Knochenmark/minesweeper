@@ -235,7 +235,11 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
   }
 
   private onCellClick(x: number, y: number) {
-    if (this.state.gameStatus === GameStatus.VICTORY || this.state.gameStatus === GameStatus.GAME_OVER) {
+    if (
+      this.state.gameStatus === GameStatus.VICTORY ||
+      this.state.gameStatus === GameStatus.GAME_OVER ||
+      this.isFlagged(x, y)
+    ) {
       return;
     }
     if (this.state.gameStatus !== GameStatus.RUNNING) {
@@ -267,6 +271,8 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
   }
 
   private isMine = (x: number, y: number): boolean => this.state.mineField[x][y].isMine;
+
+  private isFlagged = (x: number, y: number): boolean => this.state.mineField[x][y].isFlagged;
 
   private revealAllMines() {
     const mineField = this.state.mineField;
