@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import SmileyDead from './icons/smiley-dead';
 import SmileyLaugh from './icons/smiley-laugh';
 import SmileySunGlasses from './icons/smiley-sunglasses';
@@ -333,7 +332,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
       return;
     }
     const surroundingMines = cellPositions
-      .map(([x, y]) => this.state.mineField[x][y])
+      .map(([posX, posY]) => this.state.mineField[posX][posY])
       .filter((mine) => !mine.isRevealed && !mine.isFlagged);
 
     surroundingMines.forEach((mine: IMineField) => {
@@ -354,7 +353,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
     });
   }
 
-  private getSurroundingCells(x: number, y: number): [number, number][] {
+  private getSurroundingCells(x: number, y: number): Array<[number, number]> {
     return [
       [x - 1, y - 1],
       [x, y - 1],
@@ -393,7 +392,7 @@ export default class MineSweeper extends React.Component<IMineSweeperProps, IMin
 
   private constructSurroundingCells(x: number, y: number) {
     return this.getSurroundingCells(x, y).reduce(
-      (acc: [number, number][], val) =>
+      (acc: Array<[number, number]>, val) =>
         val[0] < 0
           ? acc
           : val[1] < 0
